@@ -1,0 +1,14 @@
+{
+  "name": "finalback-root",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "index.js",
+  "workspaces": [
+    "final"
+  ],
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node index.js"
+  }
+}
