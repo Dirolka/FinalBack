@@ -9,8 +9,29 @@ dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 import { createServer } from './server.js';
 
-const port = process.env.PORT || 3000;
-
+const basePort = Number(process.env.PORT) || 3000;
 const { start } = createServer();
 
-start(port);
+async function startWithRetry(port, maxRetries = 5) {
+  let attempt = 0;
+  let currentPort = port;
+
+  while (attempt <= maxRetries) {
+    try {
+      await start(currentPort);
+      return;
+    } catch (err) {
+      if (err && err.code === 'EADDRINUSE') {
+        attempt += 1;
+        currentPort += 1;
+        console.warn(`Port in use, retrying on ${currentPort}...`);
+        continue;
+      }
+      throw err;
+    }
+  }
+
+  throw new Error(`No available ports starting at ${port}`);
+}
+
+startWithRetry(basePort);

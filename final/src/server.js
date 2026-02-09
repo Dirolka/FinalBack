@@ -56,10 +56,16 @@ export function createServer() {
     await User.syncIndexes();
     console.log('User indexes synced');
 
-    return new Promise((resolve) => {
-      const server = app.listen(port, () => {
+    return new Promise((resolve, reject) => {
+      const server = app.listen(port);
+
+      server.once('listening', () => {
         console.log(`Server running on port ${port}`);
         resolve(server);
+      });
+
+      server.once('error', (err) => {
+        reject(err);
       });
     });
   }
