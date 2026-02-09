@@ -1,0 +1,592 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Manager</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="header">
+      <h1 class="header-logo">
+        <a href="#home" class="header-logo-link">
+          <span class="header-logo-mark">Chapter</span>.shop
+        </a>
+      </h1>
+
+      <button class="catalog-toggle" type="button" onclick="toggleCatalog()">
+        <span class="catalog-toggle-icon">☰</span>
+        <span>Каталог</span>
+      </button>
+
+      <nav class="header-nav">
+        <form class="header-search" id="headerSearchForm" onsubmit="return handleHeaderSearch(event)">
+          <input
+            type="search"
+            id="headerSearchInput"
+            class="header-search-input"
+            placeholder="Искать товары: смартфоны, техника, аксессуары..."
+          />
+          <button class="header-search-button" type="submit">Найти</button>
+        </form>
+      </nav>
+
+      <div class="header-buttons">
+        <div id="authButtons" class="header-icons">
+          <a href="#favorites" class="header-icon-link" title="Избранное">
+            <span class="icon-heart"></span>
+            <span class="header-icon-label">Избранное</span>
+          </a>
+          <a href="#cart" class="header-icon-link" title="Корзина">
+            <span class="cart-icon-wrap">
+              <span class="icon-cart"></span>
+              <span class="cart-badge" style="display:none">0</span>
+            </span>
+            <span class="header-icon-label">Корзина</span>
+          </a>
+          <a href="#" class="header-icon-link" onclick="event.preventDefault(); openModal('loginModal'); return false;" title="Войти">
+            <span class="icon-user"></span>
+            <span class="header-icon-label">Войти</span>
+          </a>
+        </div>
+        <div id="userSection" class="hidden header-user">
+          <a href="#favorites" class="header-icon-link" title="Избранное">
+            <span class="icon-heart"></span>
+            <span class="header-icon-label">Избранное</span>
+          </a>
+          <a href="#cart" class="header-icon-link" title="Корзина">
+            <span class="cart-icon-wrap">
+              <span class="icon-cart"></span>
+              <span class="cart-badge" style="display:none">0</span>
+            </span>
+            <span class="header-icon-label">Корзина</span>
+          </a>
+          <div class="user-profile-wrap">
+            <button type="button" class="user-profile-block" onclick="toggleProfileDropdown(event)" title="Профиль">
+              <span class="user-profile-icon"></span>
+              <span class="user-profile-text" id="userProfileText"></span>
+            </button>
+            <div id="profileDropdown" class="profile-dropdown">
+              <a href="#account" class="profile-dropdown-item" onclick="document.getElementById('profileDropdown')?.classList.remove('open')">
+                <span class="profile-dropdown-icon">👤</span>
+                Личный кабинет
+              </a>
+              <a href="#account" class="profile-dropdown-item" onclick="document.getElementById('profileDropdown')?.classList.remove('open')">
+                <span class="profile-dropdown-icon">📦</span>
+                Мои заказы
+              </a>
+              <a href="#favorites" class="profile-dropdown-item" onclick="document.getElementById('profileDropdown')?.classList.remove('open')">
+                <span class="profile-dropdown-icon">❤</span>
+                Избранное
+              </a>
+              <div class="profile-dropdown-divider"></div>
+              <div class="profile-dropdown-footer">
+                <span id="profileDropdownPhone" class="profile-dropdown-phone"></span>
+                <button type="button" class="profile-dropdown-logout" onclick="logout(); document.getElementById('profileDropdown')?.classList.remove('open');" title="Выйти">
+                  <span class="logout-icon"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <span id="userEmail" class="hidden"></span>
+        </div>
+      </div>
+    </header>
+
+    <div id="catalogPanel" class="catalog-panel">
+      <div class="catalog-layout">
+        <aside class="catalog-sidebar">
+          <button class="catalog-sidebar-item active" type="button" data-category="smartphones">
+            Смартфоны и гаджеты
+          </button>
+          <button class="catalog-sidebar-item" type="button" data-category="home">
+            Техника для дома
+          </button>
+          <button class="catalog-sidebar-item" type="button" data-category="appliances">
+            Бытовая техника
+          </button> 
+        </aside>
+        <section class="catalog-content">
+          <div class="catalog-pane active" data-category="smartphones">
+            <h2 class="catalog-title">Смартфоны и гаджеты</h2>
+            <div class="catalog-columns">
+              <div class="catalog-column">
+                <h3 class="catalog-column-title">Смартфоны и телефоны</h3>
+                <a href="#products" class="catalog-link" data-category-name="Смартфон">Смартфоны</a>
+                <a href="#products" class="catalog-link" data-category-name="Apple">Смартфоны Apple</a>
+                <a href="#products" class="catalog-link" data-category-name="Samsung">Смартфоны Samsung</a>
+                <a href="#products" class="catalog-link" data-category-name="Xiaomi">Смартфоны Xiaomi</a>
+                <a href="#products" class="catalog-link" data-category-name="Honor">Смартфоны HONOR</a>
+                <a href="#products" class="catalog-link">Кнопочные телефоны</a>
+                <a href="#products" class="catalog-link">Домашние телефоны</a>
+              </div>
+              <div class="catalog-column">
+                <h3 class="catalog-column-title">Гаджеты</h3>
+                <a href="#products" class="catalog-link">Смарт‑часы</a>
+                <a href="#products" class="catalog-link">Фитнес‑браслеты</a>
+                <a href="#products" class="catalog-link">Наушники</a>
+                <a href="#products" class="catalog-link">Портативные колонки</a>
+                <a href="#products" class="catalog-link">Аксессуары для гаджетов</a>
+              </div>
+              <div class="catalog-column">
+                <h3 class="catalog-column-title">Аксессуары для смартфонов</h3>
+                <a href="#products" class="catalog-link">Чехлы для телефонов</a>
+                <a href="#products" class="catalog-link">Защитные стёкла</a>
+                <a href="#products" class="catalog-link">Плёнки и наклейки</a>
+                <a href="#products" class="catalog-link">Зарядные устройства</a>
+                <a href="#products" class="catalog-link">PowerBank</a>
+                <a href="#products" class="catalog-link">Кабели и переходники</a>
+              </div>
+            </div>
+          </div>
+          <div class="catalog-pane" data-category="home">
+            <h2 class="catalog-title">Техника для дома</h2>
+            <h3 class="catalog-subtitle">Техника для уборки дома</h3>
+            <div class="catalog-list">
+              <a href="#products" class="catalog-link">Пылесосы</a>
+              <a href="#products" class="catalog-link">Напольные пылесосы</a>
+              <a href="#products" class="catalog-link">Роботы-пылесосы</a>
+              <a href="#products" class="catalog-link">Вертикальные пылесосы</a>
+              <a href="#products" class="catalog-link">Моющие пылесосы</a>
+              <a href="#products" class="catalog-link">Пароочистители</a>
+              <a href="#products" class="catalog-link">Электрошвабры</a>
+              <a href="#products" class="catalog-link">Паровые швабры</a>
+              <a href="#products" class="catalog-link">Швабры, насадки и наборы</a>
+              <a href="#products" class="catalog-link">Стеклоочистители</a>
+            </div>
+          </div>
+          <div class="catalog-pane" data-category="appliances">
+            <h2 class="catalog-title">Бытовая техника</h2>
+            <h3 class="catalog-subtitle">Крупная кухонная техника</h3>
+            <div class="catalog-list">
+              <a href="#products" class="catalog-link">Холодильники</a>
+              <a href="#products" class="catalog-link">Морозильники и лари</a>
+              <a href="#products" class="catalog-link">Газовые и электрические плиты</a>
+              <a href="#products" class="catalog-link">Настольные плиты</a>
+              <a href="#products" class="catalog-link">Посудомоечные машины</a>
+              <a href="#products" class="catalog-link">Микроволновые печи</a>
+              <a href="#products" class="catalog-link">Мини-печи электрические</a>
+              <a href="#products" class="catalog-link">Шкаф витрины</a>
+              <a href="#products" class="catalog-link">Вытяжки</a>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div id="loginModal" class="modal-overlay" onclick="closeModalOnOverlay(event, 'loginModal')">
+      <div class="modal modal-login" onclick="event.stopPropagation()">
+        <div class="modal-header">
+          <div class="modal-login-icon">🔒</div>
+          <h2>Личный кабинет</h2>
+          <button class="modal-close" onclick="closeModal('loginModal')">&times;</button>
+        </div>
+        <p class="modal-login-hint">Укажите номер, чтобы получать бонусы и отслеживать заказы</p>
+
+        <div id="loginStepPhone">
+          <form id="loginPhoneForm">
+            <div class="form-group">
+              <label for="loginPhone">Мобильный телефон</label>
+              <input type="tel" id="loginPhone" name="phone" placeholder="+7" value="+7" required />
+            </div>
+            <button type="submit" class="btn-primary form-submit btn-send-code">Выслать код</button>
+            <p class="modal-login-disclaimer">
+              Нажимая «Выслать код», я подтверждаю своё согласие на
+              <a href="#" class="modal-login-link">обработку персональных данных</a>
+            </p>
+          </form>
+        </div>
+
+        <div id="loginStepCode" class="hidden">
+          <form id="loginCodeForm">
+            <div class="form-group">
+              <label for="loginCode">Код из SMS</label>
+              <input type="text" id="loginCode" name="code" placeholder="Введите 6 цифр" maxlength="6" pattern="[0-9]{6}" required />
+            </div>
+            <button type="submit" class="btn-primary form-submit">Подтвердить</button>
+            <button type="button" class="btn-outline form-submit" onclick="backToPhoneStep()">Изменить номер</button>
+          </form>
+        </div>
+
+        <div id="loginError" class="error-message"></div>
+        <div id="loginSuccess" class="success-message"></div>
+      </div>
+    </div>
+
+    <div id="registerModal" class="modal-overlay" onclick="closeModalOnOverlay(event, 'registerModal')">
+      <div class="modal" onclick="event.stopPropagation()">
+        <div class="modal-header">
+          <h2>Регистрация</h2>
+          <button class="modal-close" onclick="closeModal('registerModal')">&times;</button>
+        </div>
+        <form id="registerForm">
+          <div class="form-group">
+            <label for="registerEmail">Email</label>
+            <input type="email" id="registerEmail" name="email" required placeholder="example@mail.com" />
+          </div>
+          <div class="form-group">
+            <label for="registerPassword">Пароль</label>
+            <input type="password" id="registerPassword" name="password" required minlength="6" placeholder="Минимум 6 символов" />
+          </div>
+          <button type="submit" class="btn-primary form-submit">Зарегистрироваться</button>
+          <div id="registerError" class="error-message"></div>
+          <div id="registerSuccess" class="success-message"></div>
+        </form>
+      </div>
+    </div>
+
+    <div id="purchaseModal" class="modal-overlay" onclick="closeModalOnOverlay(event, 'purchaseModal')">
+      <div class="modal modal-purchase" onclick="event.stopPropagation()">
+        <div class="modal-header">
+          <h2>Покупка товара</h2>
+          <button class="modal-close" onclick="closeModal('purchaseModal')">&times;</button>
+        </div>
+        <div id="purchaseContent">
+          <div class="purchase-product">
+            <h3 id="purchaseProductName"></h3>
+            <div class="purchase-meta" id="purchaseProductMeta"></div>
+            <div class="purchase-description" id="purchaseProductDescription"></div>
+            <div class="purchase-price-row">
+              <span class="purchase-price-label">Цена за шт.:</span>
+              <span id="purchaseProductPrice" class="purchase-price-value"></span>
+            </div>
+          </div>
+          <form id="purchaseForm">
+            <input type="hidden" id="purchaseProductId" name="productId" />
+            <div class="form-group">
+              <label for="purchaseQuantity">Количество</label>
+              <input type="number" id="purchaseQuantity" name="quantity" min="1" value="1" required />
+            </div>
+            <div class="purchase-total-row">
+              <span class="purchase-total-label">Итого:</span>
+              <span id="purchaseTotal" class="purchase-total-value"></span>
+            </div>
+            <button type="submit" id="purchaseConfirmBtn" class="btn-primary form-submit">Подтвердить покупку</button>
+            <div id="purchaseError" class="error-message"></div>
+            <div id="purchaseSuccess" class="success-message"></div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div id="editProductModal" class="modal-overlay" onclick="closeModalOnOverlay(event, 'editProductModal')">
+      <div class="modal" onclick="event.stopPropagation()">
+        <div class="modal-header">
+          <h2>Редактировать товар</h2>
+          <button class="modal-close" onclick="closeModal('editProductModal')">&times;</button>
+        </div>
+        <form id="editProductForm">
+          <input type="hidden" id="editProductId" name="productId" />
+          <div class="form-group">
+            <label for="editProductName">Название</label>
+            <input type="text" id="editProductName" name="name" required minlength="2" />
+          </div>
+          <div class="form-group">
+            <label for="editProductPrice">Цена (〒)</label>
+            <input type="number" id="editProductPrice" name="price" step="0.01" min="0" required />
+          </div>
+          <div class="form-group">
+            <label for="editProductCategory">Категория</label>
+            <select id="editProductCategory" name="category" required></select>
+          </div>
+          <div class="form-group">
+            <label for="editProductDescription">Описание</label>
+            <textarea id="editProductDescription" name="description" rows="3" required minlength="5"></textarea>
+          </div>
+          <button type="submit" id="editProductBtn" class="btn-primary form-submit">Сохранить</button>
+          <div id="editProductError" class="error-message"></div>
+        </form>
+      </div>
+    </div>
+
+    <main class="container">
+      <div id="pageHome" class="page active">
+        <div class="home-layout">
+          <section class="hero-carousel">
+            <div class="hero-carousel-track">
+              <div class="hero-carousel-slide active">
+                <img src="images/12fd5e269b6c3310a967b55dad250618aa2cff71.webp" alt="Акция 1" />
+              </div>
+              <div class="hero-carousel-slide">
+                <img src="images/22e33af09603c0299be66e01910988ad1b57de9b.webp" alt="Акция 2" />
+              </div>
+              <div class="hero-carousel-slide">
+                <img src="images/67b95c11d22ebfb3faecf3c53890a4ec8febb9da.webp" alt="Акция 3" />
+              </div>
+            </div>
+            <div class="hero-carousel-dots">
+              <button type="button" class="hero-carousel-dot active" data-slide="0" aria-label="Слайд 1"></button>
+              <button type="button" class="hero-carousel-dot" data-slide="1" aria-label="Слайд 2"></button>
+              <button type="button" class="hero-carousel-dot" data-slide="2" aria-label="Слайд 3"></button>
+            </div>
+            <span id="homeAuthPrompt" class="hero-carousel-hint">Войдите или зарегистрируйтесь, чтобы оформить покупку.</span>
+          </section>
+
+          <section class="section">
+            <h3 class="section-title">Популярные категории</h3>
+            <div class="category-grid">
+              <div class="category-card">
+                <div class="category-icon category-icon-sale">%</div>
+                <div class="category-name">Акции</div>
+              </div>
+              <div class="category-card">
+                <div class="category-icon">📱</div>
+                <div class="category-name">Смартфоны</div>
+              </div>
+              <div class="category-card">
+                <div class="category-icon">💻</div>
+                <div class="category-name">Ноутбуки</div>
+              </div>
+              <div class="category-card">
+                <div class="category-icon">🎧</div>
+                <div class="category-name">Наушники</div>
+              </div>
+              <div class="category-card">
+                <div class="category-icon">📺</div>
+                <div class="category-name">Телевизоры</div>
+              </div>
+              <div class="category-card">
+                <div class="category-icon">🏠</div>
+                <div class="category-name">Техника для дома</div>
+              </div>
+              <div class="category-card">
+                <div class="category-icon">🍳</div>
+                <div class="category-name">Кухонная техника</div>
+              </div>
+              <div class="category-card">
+                <div class="category-icon">➕</div>
+                <div class="category-name">Все категории</div>
+              </div>
+            </div>
+          </section>
+
+          <section class="section">
+            <h3 class="section-title">Хиты продаж</h3>
+            <div class="hits-placeholder">
+              <p>Скоро здесь появятся самые популярные товары из вашего каталога.</p>
+              <a href="#products" class="btn-primary">Перейти к списку товаров</a>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <div id="pageProducts" class="page">
+        <div class="products-layout">
+          <aside class="products-sidebar">
+            <h3 class="products-sidebar-title">Мой фильтр поиска</h3>
+            <div class="filter-group expanded">
+              <button type="button" class="filter-group-head" data-toggle="filter-price">Цена</button>
+              <div class="filter-group-body" id="filter-price">
+                <label class="filter-label">От</label>
+                <input type="number" id="filterMinPrice" class="filter-input" placeholder="0 〒" min="0">
+                <label class="filter-label">До</label>
+                <input type="number" id="filterMaxPrice" class="filter-input" placeholder="1 000 000 〒" min="0">
+              </div>
+            </div>
+            <div class="filter-group expanded">
+              <button type="button" class="filter-group-head" data-toggle="filter-brand">Бренд</button>
+              <div class="filter-group-body" id="filter-brand">
+                <select id="filterBrand" class="filter-select"><option value="">Все</option><option value="Apple">Apple</option><option value="Samsung">Samsung</option><option value="Xiaomi">Xiaomi</option><option value="Huawei">Huawei</option><option value="Honor">HONOR</option><option value="Realme">Realme</option></select>
+              </div>
+            </div>
+            <div class="filter-group">
+              <button type="button" class="filter-group-head" data-toggle="filter-category">Категория</button>
+              <div class="filter-group-body" id="filter-category">
+                <select id="filterCategory" class="filter-select"><option value="">Все</option></select>
+              </div>
+            </div>
+            <div class="filter-group">
+              <button type="button" class="filter-group-head" data-toggle="filter-model">Модель</button>
+              <div class="filter-group-body" id="filter-model">
+                <select id="filterModel" class="filter-select"><option value="">Все</option></select>
+              </div>
+            </div>
+            <div class="filter-group">
+              <button type="button" class="filter-group-head" data-toggle="filter-availability">Наличие</button>
+              <div class="filter-group-body" id="filter-availability">
+                <select id="filterAvailability" class="filter-select"><option value="">Все</option><option value="in_stock">В наличии</option><option value="display">На витрине</option></select>
+              </div>
+            </div>
+            <div class="filter-group">
+              <button type="button" class="filter-group-head" data-toggle="filter-memory">Объём встроенной памяти</button>
+              <div class="filter-group-body" id="filter-memory">
+                <select id="filterMemory" class="filter-select"><option value="">Все</option><option value="64">64 ГБ</option><option value="128">128 ГБ</option><option value="256">256 ГБ</option><option value="512">512 ГБ</option><option value="1024">1 ТБ</option></select>
+              </div>
+            </div>
+            <div class="filter-group">
+              <button type="button" class="filter-group-head" data-toggle="filter-ram">Объём оперативной памяти</button>
+              <div class="filter-group-body" id="filter-ram">
+                <select id="filterRam" class="filter-select"><option value="">Все</option><option value="4">4 ГБ</option><option value="6">6 ГБ</option><option value="8">8 ГБ</option><option value="12">12 ГБ</option><option value="16">16 ГБ</option></select>
+              </div>
+            </div>
+            <div class="filter-group">
+              <button type="button" class="filter-group-head" data-toggle="filter-platform">Платформа</button>
+              <div class="filter-group-body" id="filter-platform">
+                <select id="filterPlatform" class="filter-select"><option value="">Все</option><option value="iOS">iOS</option><option value="Android">Android</option><option value="HarmonyOS">HarmonyOS</option></select>
+              </div>
+            </div>
+            <div class="filter-group">
+              <button type="button" class="filter-group-head" data-toggle="filter-color">Цвет корпуса</button>
+              <div class="filter-group-body" id="filter-color">
+                <select id="filterColor" class="filter-select"><option value="">Все</option><option value="black">Чёрный</option><option value="white">Белый</option><option value="blue">Синий</option><option value="red">Красный</option><option value="gold">Золотой</option><option value="titanium">Титановый</option></select>
+              </div>
+            </div>
+            <div class="filter-group">
+              <button type="button" class="filter-group-head" data-toggle="filter-screen">Диагональ экрана</button>
+              <div class="filter-group-body" id="filter-screen">
+                <select id="filterScreen" class="filter-select"><option value="">Все</option><option value="6">6"</option><option value="6.1">6.1"</option><option value="6.7">6.7"</option><option value="6.9">6.9"</option></select>
+              </div>
+            </div>
+            <div id="productAdminBlock" class="filter-group hidden">
+              <button type="button" class="filter-group-head" data-toggle="filter-admin">Создать товар</button>
+              <div class="filter-group-body" id="filter-admin">
+                <form id="createProductForm">
+                  <div class="form-group">
+                    <input type="text" id="productName" name="name" required minlength="2" placeholder="Название" />
+                  </div>
+                  <div class="form-group">
+                    <input type="number" id="productPrice" name="price" step="0.01" min="0" required placeholder="Цена" />
+                  </div>
+                  <div class="form-group">
+                    <select id="productCategory" name="category" required><option value="">Категория...</option></select>
+                  </div>
+                  <div class="form-group">
+                    <label class="filter-label">Фотография</label>
+                    <div id="productImageSelector" class="image-selector-grid image-selector-compact"></div>
+                    <input type="hidden" id="productImage" name="image" />
+                  </div>
+                  <div class="form-group">
+                    <textarea id="productDescription" name="description" rows="2" required minlength="5" placeholder="Описание"></textarea>
+                  </div>
+                  <button type="submit" id="createProductBtn" class="btn-primary form-submit">Создать</button>
+                  <div id="createProductError" class="error-message"></div>
+                </form>
+              </div>
+            </div>
+          </aside>
+          <main class="products-main">
+            <div class="products-toolbar">
+              <input type="search" id="filterSearch" class="products-search-input" placeholder="Поиск по названию..." />
+              <select id="productsSort" class="products-sort">
+                <option value="">Сначала популярное</option>
+                <option value="price-asc">Сначала дешевле</option>
+                <option value="price-desc">Сначала дороже</option>
+              </select>
+              <button class="btn-secondary btn-small" onclick="loadProducts()">Обновить</button>
+            </div>
+            <div id="productsList" class="products-grid"></div>
+            <div id="productsError" class="error-message"></div>
+          </main>
+        </div>
+      </div>
+
+      <div id="pageProduct" class="page">
+        <div id="productDetailContent"></div>
+        <div id="productDetailError" class="error-message"></div>
+      </div>
+
+      <div id="pageCart" class="page">
+        <div id="cartEmpty" class="cart-empty">
+          <h2 class="cart-empty-title">Корзина пуста</h2>
+          <p class="cart-empty-text">
+            Вы можете начать свой выбор с главной страницы, посмотреть акции или воспользоваться поиском, если ищете что-то конкретное.
+          </p>
+          <a href="#products" class="btn-primary cart-empty-btn">Продолжить покупки</a>
+        </div>
+        <div id="cartContent" class="cart-content hidden">
+          <h2>Корзина</h2>
+          <div id="cartItems"></div>
+          <div class="cart-total">
+            <strong>Итого:</strong> <span id="cartTotalSum">0</span> 〒
+          </div>
+          <button id="cartCheckoutBtn" class="btn-primary">Оформить заказ</button>
+          <a href="#products" class="btn-secondary">Продолжить покупки</a>
+        </div>
+      </div>
+
+      <div id="pageAccount" class="page">
+        <div id="accountProfile" class="card account-section hidden"></div>
+        <div id="accountOrders" class="account-section hidden"></div>
+        <div id="accountAdmin" class="account-section hidden">
+          <h2>Админка: категории и товары</h2>
+          <div class="grid">
+            <div class="card">
+              <h3>Создать товар</h3>
+              <form id="createProductFormAccount">
+                <div class="form-group">
+                  <label for="productNameAccount">Название</label>
+                  <input type="text" id="productNameAccount" name="name" required minlength="2" />
+                </div>
+                <div class="form-group">
+                  <label for="productPriceAccount">Цена (〒)</label>
+                  <input type="number" id="productPriceAccount" name="price" step="0.01" min="0" required />
+                </div>
+                <div class="form-group">
+                  <label for="productCategoryAccount">Категория</label>
+                  <select id="productCategoryAccount" name="category" required><option value="">Категория...</option></select>
+                </div>
+                <div class="form-group">
+                  <label>Фотография</label>
+                  <div id="productImageSelectorAccount" class="image-selector-grid"></div>
+                  <input type="hidden" id="productImageAccount" name="image" />
+                </div>
+                <div class="form-group">
+                  <label for="productDescriptionAccount">Описание</label>
+                  <textarea id="productDescriptionAccount" name="description" rows="2" required minlength="5"></textarea>
+                </div>
+                <button type="submit" class="btn-primary form-submit">Создать</button>
+                <div id="createProductErrorAccount" class="error-message"></div>
+              </form>
+            </div>
+            <div class="card">
+              <h3>Создать категорию</h3>
+              <form id="createCategoryForm">
+                <div class="form-group">
+                  <label for="categoryName">Название</label>
+                  <input type="text" id="categoryName" name="name" required minlength="2" />
+                </div>
+                <div class="form-group">
+                  <label>Фотография</label>
+                  <div id="categoryImageSelector" class="image-selector-grid"></div>
+                  <input type="hidden" id="categoryImage" name="image" />
+                </div>
+                <div class="form-group">
+                  <label for="categoryModel">Модель</label>
+                  <input type="text" id="categoryModel" name="model" placeholder="Например: 15 Pro" />
+                </div>
+                <div class="form-group">
+                  <label for="categoryMemory">Объём памяти</label>
+                  <input type="text" id="categoryMemory" name="memory" placeholder="Например: 256 GB" />
+                </div>
+                <div class="form-group">
+                  <label for="categoryColor">Цвет</label>
+                  <input type="text" id="categoryColor" name="color" placeholder="Например: Чёрный" />
+                </div>
+                <div class="form-group">
+                  <label for="categoryDescription">Описание</label>
+                  <textarea id="categoryDescription" name="description" rows="2"></textarea>
+                </div>
+                <button type="submit" id="createCategoryBtn" class="btn-primary form-submit">Создать</button>
+                <div id="createCategoryError" class="error-message"></div>
+              </form>
+            </div>
+            <div>
+              <div class="list-header">
+                <h3>Список категорий</h3>
+                <button class="btn-secondary btn-small" onclick="loadCategories()">Обновить</button>
+              </div>
+              <div id="categoriesList"></div>
+              <div id="categoriesError" class="error-message"></div>
+            </div>
+          </div>
+        </div>
+        <div id="accountGuest" class="card account-section">
+          <p>Войдите в аккаунт, чтобы видеть заказы и личные данные.</p>
+          <button class="btn-primary" onclick="openModal('loginModal')">Вход</button>
+        </div>
+      </div>
+    </main>
+
+    <script src="site.js"></script>
+  </body>
+</html>
