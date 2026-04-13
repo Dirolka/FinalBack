@@ -1,0 +1,18 @@
+groups:
+  - name: myapp_alerts
+    rules:
+      - alert: HighErrorRate
+        expr: rate(http_requests_total{status=~"5.."}[1m]) > 0.05
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Высокий процент ошибок"
+
+      - alert: ServiceDown
+        expr: up{job="backend"} == 0
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Бэкенд недоступен!"
